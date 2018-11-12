@@ -1,7 +1,7 @@
 <?php
   require("functions.php");
   //kui pole sisse loginud
-  require("/classes/Photoupload.class.php");
+  require("classes/Photoupload.class.php");
   //kui pole sisselogitud
   if(!isset($_SESSION["userId"])){
 	header("Location: index.php");
@@ -69,32 +69,29 @@
 			echo "Vabandame, faili ei laetud üles!";
 		// kui kõik korras, laeme üles
 		} else {
-			
-			$myphoto = new Photoupload($_FILES["fileToUpload"]["tmp_name"], $imageFileType);
-			$myPhoto->resizeImage(600, 400);
-			$myPhoto->addWaterMark();
-			$myPhoto->addText();
-			$saveResult = $myPhoto->savePhoto($target_file);
-			//kui salvestus õnnestus, lisame andmebaasi
-			if($saveResult = 1){
-				addPhotoData($target_file_name, $_POST("altText"), $_POST["privacy"])
+				$myPhoto = new Photoupload($_FILES["fileToUpload"]["tmp_name"], $imageFileType);
+				$myPhoto->resizeImage(600, 400);
+				$myPhoto->addWatermark();
+				$myPhoto->addText();
+				$saveResult = $myPhoto->savePhoto($target_file);
+				//kui salvestus õnnestus, lisame andmebaasi
+				if($saveResult == 1){
+				  addPhotoData($target_file_name, $_POST["altText"], $_POST["privacy"]);
+				}
+				unset($myPhoto);
+				
+				
+/* 				if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
+					echo "Fail ". basename( $_FILES["fileToUpload"]["name"]). " on üles laetud!";
+				} else {
+					echo "Vabandame, faili üleslaadimine ebaõnnestus!";
+				} */
 			}
-			unset ($myPhoto);
-			
-			imagedestroy($myTempImage);
-			imagedestroy($myImage);
-			
-/*			if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
-				echo "Fail ". basename( $_FILES["fileToUpload"]["name"]). " on üles laetud!";
-			} else {
-				echo "Vabandame, faili üleslaadimine ebaõnnestus!";
-			} */
-		}
 		}//ega failinimi tühi pole
-	}//kas on submit nuppu vajutatud
+	}//kas on submit nuppu vajutatudd
   function resizeImage($image, $ow, $oh, $w, $h) {
 	  $newImage = imagecreatetruecolor($w, $h);
-	  imagecopyresampled($newImagem $image, 0, 0, 0, 0, $w, $h, $ow, $oh);
+	  imagecopyresampled($newImage, $image, 0, 0, 0, 0, $w, $h, $ow, $oh);
 	  return $newImage;
   }
   
