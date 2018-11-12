@@ -79,7 +79,7 @@
 			if($saveResult = 1){
 				addPhotoData($target_file_name, $_POST("altText"), $_POST["privacy"])
 			}
-			unset
+			unset ($myPhoto);
 			
 			imagedestroy($myTempImage);
 			imagedestroy($myImage);
