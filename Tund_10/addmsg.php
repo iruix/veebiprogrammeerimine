@@ -36,5 +36,7 @@
 	  echo $notice;
 	?>
     </p>
+	<hr>
+	<p><a href="index.php">Tagasi</a> avalehele!</p>
   </body>
 </html>

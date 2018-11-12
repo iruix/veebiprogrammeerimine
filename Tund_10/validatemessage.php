@@ -1,22 +1,25 @@
 <?php
-  require("functions.php");
+    require("functions.php");
   //kui pole sisse loginud
   
   //kui pole sisselogitud
   if(!isset($_SESSION["userId"])){
-	  header("Location: index.php");
-	  exit;
+	header("Location: index.php");
+    exit();	
   }
   
   //väljalogimine
   if(isset($_GET["logout"])){
-	  session_destroy();
-	  header("Location: index.php");
-	  exit();
+	session_destroy();
+	header("Location:  index.php");
+	exit();
   }
   
-  if(isset($_GET["if"])){
-	  $msg = readmsgforvalidation($_GET["id"]);
+  if(isset($_GET["id"])){
+	$msg = readmsgforvalidation($_GET["id"]);  
+  }
+  if(isset($_POST["submitValidation"])){
+	validatemsg(intval($_POST["id"]), intval($_POST["validation"]));
   }
 ?>
 <!DOCTYPE html>
@@ -24,6 +27,12 @@
 <head>
   <meta charset="utf-8">
   <title>Anonüümsed sõnumid</title>
+  <style>
+	  <?php
+        echo "body{background-color: " .$_SESSION["bgColor"] ."; \n";
+		echo "color: " .$_SESSION["txtColor"] ."} \n";
+	  ?>
+	</style>
 </head>
 <body>
   <h1>Sõnumid</h1>
@@ -36,9 +45,8 @@
   <hr>
   <h2>Valideeri see sõnum:</h2>
   <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-	<input name="id" type="hidden" value="<?php echo $_GET["id"]; ?>">
-    <p><?php echo $msg;
-	?></p>
+    <input name="id" type="hidden" value="<?php echo $_GET["id"]; ?>">
+    <p><?php echo $msg; ?></p>
     <input type="radio" name="validation" value="0" checked><label>Keela näitamine</label><br>
     <input type="radio" name="validation" value="1"><label>Luba näitamine</label><br>
     <input type="submit" value="Kinnita" name="submitValidation">
